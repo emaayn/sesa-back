@@ -15,7 +15,14 @@ export class GalleryController {
 findByCategory(@Param('id') id: string) {
   return this.service.findByCategory(+id);
 }
-
+@Get('get')
+findAll() {
+  return this.service.findAll();
+}
+@Get('delete/:id')
+delete(@Param('id') id: string) {
+  return this.service.delete(+id);
+}
 /* @UseGuards(AuthGuard) */
 @Post('create')
 @UseInterceptors(FileInterceptor('image', {

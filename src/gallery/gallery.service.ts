@@ -20,4 +20,12 @@ export class GalleryService {
   async create(data){
     return await this.repository.save(data);
   }
+
+  async findAll(){
+    return await this.repository.find();
+  }
+
+  async delete(id: number){
+    return await this.repository.delete(id);
+  }
 }

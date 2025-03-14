@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Res, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -95,6 +95,11 @@ async addCategoryImage(
     @Delete(':id')
     remove(@Param('id') id: string) {
     return this.service.delete(+id);
+    }
+
+    @Get('photo/:file')
+    seeUploadedFile(@Param() params, @Res() res) {
+      return res.sendFile('/' + params.file, { root: './public' });
     }
 
 }

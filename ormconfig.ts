@@ -24,7 +24,8 @@ export default new DataSource({
     CreateCategoryTable1739863121725,
     CreateProductTable1739863098488,
     CreateUsersTable1739863114487,
-    CreateGalleryTable1741623691711
+    CreateGalleryTable1741623691711,
+    FillUsersTable1739908247881
   ],
   synchronize: false
 });

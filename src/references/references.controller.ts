@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Param, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Res, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ReferencesService } from './references.service';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { AuthGuard } from 'src/auth/auth.guard';
 
@@ -10,9 +10,14 @@ export class ReferencesController {
         private readonly service: ReferencesService
     ){}
 
-@UseGuards(AuthGuard)
+
+    @Get('get')
+    async find(){
+      return await this.service.findAll();
+    } 
+/* @UseGuards(AuthGuard) */
 @Post('create')
-@UseInterceptors(FileInterceptor('images', {
+@UseInterceptors(FilesInterceptor('images', 10, {
   storage: diskStorage({
     destination: './public',
     filename: (req, file, callback) => {
@@ -27,15 +32,17 @@ export class ReferencesController {
     callback(null, true);
   }
 }))
-async createReference(
-  @Body() body,
-  @UploadedFile() file: Express.Multer.File
-) {
-    body.image = file.filename;
-  return this.service.create(body);
+async update(@Param('id') id: string, @Body() body, @UploadedFiles() files: Array<Express.Multer.File>) {
+  let images = [];
+  for (let index = 0; index < files.length; index++) {
+    const file = files[index];
+    images.push(file.filename)
+    
+  }
+  body.images = JSON.stringify(images);
+  return this.service.create( body);
 }
-
-@UseGuards(AuthGuard)
+/* @UseGuards(AuthGuard) */
 @Get('delete/:id')
 async deleteReference(
     @Param('id') id: number 
@@ -49,9 +56,9 @@ async findOne(
 ){
     return await this.service.findOne(id);
 }
- 
-@Get('get')
-async find(){
-  return await this.service.findAll();
+
+@Get('photo/:file')
+seeUploadedFile(@Param() params, @Res() res) {
+  return res.sendFile('/' + params.file, { root: './public' });
 }
 }

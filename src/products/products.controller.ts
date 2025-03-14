@@ -19,11 +19,11 @@ constructor(
     { name: 'product_three', maxCount: 1 },
     { name: 'product_four', maxCount: 1 },
     { name: 'product_five', maxCount: 1 },
-    { name: 'example_one', maxCount: 1 },
-    { name: 'example_two', maxCount: 1 },
-    { name: 'example_three', maxCount: 1 },
-    { name: 'example_four', maxCount: 1 },
-    { name: 'example_five', maxCount: 1 },
+    { name: 'reference_one', maxCount: 1 },
+    { name: 'reference_two', maxCount: 1 },
+    { name: 'reference_three', maxCount: 1 },
+    { name: 'reference_four', maxCount: 1 },
+    { name: 'reference_five', maxCount: 1 },
   ],
   //options for files
   {
@@ -48,11 +48,11 @@ async create(
       product_three?: Express.Multer.File[],
       product_four?: Express.Multer.File[],
       product_five?: Express.Multer.File[],
-      example_one?: Express.Multer.File[],
-      example_two?: Express.Multer.File[],
-      example_three?: Express.Multer.File[],
-      example_four?: Express.Multer.File[],
-      example_five?: Express.Multer.File[]
+      reference_one?: Express.Multer.File[],
+      reference_two?: Express.Multer.File[],
+      reference_three?: Express.Multer.File[],
+      reference_four?: Express.Multer.File[],
+      reference_five?: Express.Multer.File[]
       }
 ) {
     let product_images = [];
@@ -60,7 +60,7 @@ async create(
     for (const [key, value] of Object.entries(files)) {
         if(key.includes("product")){
             product_images.push(value[0].filename)
-        }else if (key.includes("example")){
+        }else if (key.includes("reference")){
             reference_images.push(value[0].filename)
         }
     }
@@ -85,7 +85,7 @@ findOne(@Param('id') id: string) {
 @Patch(':id')
 @UseInterceptors(FilesInterceptor('files', 10, {
   storage: diskStorage({
-    destination: './uploads/products',
+    destination: './public',
     filename: (req, file, callback) => {
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
       callback(null, `${uniqueSuffix}-${file.originalname}`);
@@ -104,7 +104,7 @@ async update(@Param('id') id: string, @Body() body, @UploadedFiles() files: Arra
   for (const [key, value] of Object.entries(files)) {
       if(key.includes("product")){
           product_images.push(value[0].filename)
-      }else if (key.includes("example")){
+      }else if (key.includes("reference")){
           reference_images.push(value[0].filename)
       }
   }

@@ -18,7 +18,10 @@ export class Product {
     category_id: number;
 
     @Column()
-    description: string;
+    description_tr: string;
+
+    @Column()
+    description_en: string;
 
     @Column()
     product_images: string;

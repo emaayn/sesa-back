@@ -22,7 +22,4 @@ export class Category {
 
     @Column()
     horizontal_image: string;
-
-    @Column()
-    slug: string;
 }

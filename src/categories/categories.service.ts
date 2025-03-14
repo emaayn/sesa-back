@@ -19,12 +19,6 @@ export class CategoriesService {
         return await this.repository.findOneBy({id});
     }
 
-    async findOneBySlug(slug){
-        console.log("slug");
-        console.log(slug);
-        return await this.repository.findOneBy({slug});
-    }
-
     async create(data){
         return await this.repository.save(data);
     }
@@ -35,7 +29,8 @@ export class CategoriesService {
 
     async delete(id){
         const category = await this.repository.findOneBy({id});
-        this.deleteImage(category.horizontal_image);
+        const horizontalImages = JSON.parse(category.horizontal_image || '[]');
+        horizontalImages.forEach(image => this.deleteImage(image));
         this.deleteImage(category.vertical_image);
         return await this.repository.delete({id});
     }
